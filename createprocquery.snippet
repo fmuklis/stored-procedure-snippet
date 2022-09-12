@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>  
+<CodeSnippets  xmlns="https://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">  
+    <_locDefinition xmlns="urn:locstudio">  
+        <_locDefault _loc="locNone" />  
+        <_locTag _loc="locData">Title</_locTag>  
+        <_locTag _loc="locData">Description</_locTag>  
+        <_locTag _loc="locData">Author</_locTag>  
+        <_locTag _loc="locData">ToolTip</_locTag>  
+        <_locTag _loc="locData">Default</_locTag>  
+    </_locDefinition>
+<CodeSnippet Format="1.0.0">  
+    <Header>  
+        <Title>Create SProc Query</Title>  
+        <Shortcut></Shortcut>  
+        <Description>Snippet for creating procedure</Description>  
+        <Author>SQL Server Books Online Example</Author>  
+        <SnippetTypes>  
+            <SnippetType>Expansion</SnippetType>  
+        </SnippetTypes>  
+    </Header>  
+    <Snippet>  
+    <Declarations>  
+        <Literal>  
+        <ID>CatchCode</ID>  
+        <ToolTip>Code to handle the caught error</ToolTip>  
+        <Default>CatchCode</Default>  
+        </Literal>  
+    </Declarations>  
+    <Code Language="SQL">
+				<![CDATA[
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE <Procedure_Name, sysname, ProcedureName> 
+	-- Add the parameters for the stored procedure here
+	<@Param1, sysname, @p1> <Datatype_For_Param1, , int> = <Default_Value_For_Param1, , 0>, 
+	<@Param2, sysname, @p2> <Datatype_For_Param2, , int> = <Default_Value_For_Param2, , 0>
+	
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	/*Make variable*/
+	DECLARE @responseCode bit
+		   ,@response nvarchar(max);
+		   
+	/*SET variable value*/
+	SELECT @responseCode = 0/*SET default response code as failed*/
+		  ,@response = 'Terjadi error saat memproses permintaan anda';		   
+				
+    IF 1 = 1
+        BEGIN
+            SELECT 'respon' AS respon, 0 AS responCode;
+        END
+    ELSE  
+        BEGIN TRY
+            /*Transaction Begin*/
+            BEGIN TRAN;
+
+
+            /*Transaction Commit*/
+            COMMIT TRAN;
+            SELECT 'respon' AS respon, 0 AS responCode;
+        END TRY
+        BEGIN CATCH
+            /*Transaction Rollback*/
+            ROLLBACK TRAN;
+            SELECT responCode, respon
+		      FROM dbo.generate_exceptionMessage(@responseCode, ERROR_MESSAGE());
+        END CATCH  
+END
+GO			
+    ]]>  
+    </Code>  
+    </Snippet>  
+</CodeSnippet>  
+</CodeSnippets>

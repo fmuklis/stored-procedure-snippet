@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>  
+<CodeSnippets  xmlns="https://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">  
+    <_locDefinition xmlns="urn:locstudio">  
+        <_locDefault _loc="locNone" />  
+        <_locTag _loc="locData">Title</_locTag>  
+        <_locTag _loc="locData">Description</_locTag>  
+        <_locTag _loc="locData">Author</_locTag>  
+        <_locTag _loc="locData">ToolTip</_locTag>  
+        <_locTag _loc="locData">Default</_locTag>  
+    </_locDefinition>
+<CodeSnippet Format="1.0.0">  
+    <Header>  
+        <Title>Generate Log Activity</Title>  
+        <Shortcut></Shortcut>  
+        <Description>generate log for user activity</Description>  
+        <Author>SQL Server Books Online Example</Author>  
+        <SnippetTypes>  
+            <SnippetType>Expansion</SnippetType>  
+        </SnippetTypes>  
+    </Header>  
+    <Snippet>  
+    <Declarations>  
+        <Literal>  
+        <ID>CatchCode</ID>  
+        <ToolTip>Code to handle the caught error</ToolTip>  
+        <Default>CatchCode</Default>  
+        </Literal>  
+    </Declarations>  
+    <Code Language="SQL">
+				<![CDATA[
+	/*Generate log activity*/
+		/*Make variable*/
+		DECLARE @description nvarchar(max)
+			   ,@otherData nvarchar(max);
+
+		/*SET activity description*/
+		SELECT @description = CONCAT(a.fullName, ' activity description')
+		  FROM dbo.getInfo_dataUser(@userIdSession) a;
+
+		/*Add log activity*/
+		EXECUTE dbo.system_activity_log_Add @userIdSession, 'system configuration', @description, @ip, procedure name, 'U', @origin, @otherData;
+    ]]>  
+    </Code>  
+    </Snippet>  
+</CodeSnippet>  
+</CodeSnippets>

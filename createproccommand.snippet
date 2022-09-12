@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>  
+<CodeSnippets  xmlns="https://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">  
+    <_locDefinition xmlns="urn:locstudio">  
+        <_locDefault _loc="locNone" />  
+        <_locTag _loc="locData">Title</_locTag>  
+        <_locTag _loc="locData">Description</_locTag>  
+        <_locTag _loc="locData">Author</_locTag>  
+        <_locTag _loc="locData">ToolTip</_locTag>  
+        <_locTag _loc="locData">Default</_locTag>  
+    </_locDefinition>
+<CodeSnippet Format="1.0.0">  
+    <Header>  
+        <Title>Create SProc Command</Title>  
+        <Shortcut></Shortcut>  
+        <Description>Snippet for creating procedure</Description>  
+        <Author>SQL Server Books Online Example</Author>  
+        <SnippetTypes>  
+            <SnippetType>Expansion</SnippetType>  
+        </SnippetTypes>  
+    </Header>  
+    <Snippet>  
+    <Declarations>  
+        <Literal>  
+        <ID>CatchCode</ID>  
+        <ToolTip>Code to handle the caught error</ToolTip>  
+        <Default>CatchCode</Default>  
+        </Literal>  
+    </Declarations>  
+    <Code Language="SQL">
+				<![CDATA[
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE <Procedure_Name, sysname, ProcedureName> 
+	-- Add the parameters for the stored procedure here
+	@params, 
+	@responseCode bit OUTPUT,
+	@response varchar(max) OUTPUT
+	
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+		   
+	/*SET default response code*/
+	SELECT @responseCode = 0/*failed as default response code*/
+		  ,@response = 'Terjadi error saat memproses permintaan anda';		   
+				
+    IF 1 = 1
+        BEGIN
+            SELECT @response = 'Terjadi error saat memproses permintaan anda';	
+        END
+    ELSE  
+        BEGIN TRY
+            
+			/*Return response message*/
+			SELECT @responseCode = 1/*success as response code*/, @response = 'Success';
+        END TRY  
+        BEGIN CATCH  
+            /*Return exception message*/
+			SELECT @responseCode = responCode, @response = responseOrigin
+		      FROM dbo.generate_exceptionMessage(@responseCode, ERROR_MESSAGE());
+        END CATCH  
+END
+GO			
+    ]]>  
+    </Code>  
+    </Snippet>  
+</CodeSnippet>  
+</CodeSnippets>
