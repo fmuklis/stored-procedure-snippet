@@ -30,7 +30,7 @@
 		<![CDATA[
     /*Make variable*/
 	DECLARE @sql nvarchar(max)
-		   ,@paramsDefinition nvarchar(max) = '@parLanguagId tinyint, @parSchoolLocationId tinyint'
+		   ,@paramsDefinition nvarchar(max) = '@parLanguageId tinyint, @parSchoolLocationId tinyint'
 		   ,@filter nvarchar(max) = '';
 
 	SET @filter += IIF(ISNULL(@schoolLocationId, 0) <> 0, ' AND bb.schoolLocationId = @parSchoolLocationId', '');
@@ -41,7 +41,7 @@
 
     SET @sql = REPLACE(@sql,'#dynamic#',@filter);
 
-	EXECUTE sp_executesql @sql, @paramsDefinition, @parLanguagId = @languagId, @parSchoolLocationId = @schoolLocationId;
+	EXECUTE sp_executesql @sql, @paramsDefinition, @parLanguageId = @languageId, @parSchoolLocationId = @schoolLocationId;
 
         ]]>  
     </Code>  
