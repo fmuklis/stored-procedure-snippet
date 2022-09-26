@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>  
+<CodeSnippets  xmlns="https://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">  
+    <_locDefinition xmlns="urn:locstudio">  
+        <_locDefault _loc="locNone" />  
+        <_locTag _loc="locData">Title</_locTag>  
+        <_locTag _loc="locData">Description</_locTag>  
+        <_locTag _loc="locData">Author</_locTag>  
+        <_locTag _loc="locData">ToolTip</_locTag>  
+        <_locTag _loc="locData">Default</_locTag>  
+    </_locDefinition>
+<CodeSnippet Format="1.0.0">  
+    <Header>  
+        <Title>Dynamic Query</Title>  
+        <Shortcut></Shortcut>  
+        <Description>generate dynamic query</Description>  
+        <Author>SQL Server Books Online Example</Author>  
+        <SnippetTypes>  
+            <SnippetType>Expansion</SnippetType>  
+        </SnippetTypes>  
+    </Header>  
+    <Snippet>  
+    <Declarations>  
+        <Literal>  
+        <ID>CatchCode</ID>  
+        <ToolTip>Code to handle the caught error</ToolTip>  
+        <Default>CatchCode</Default>  
+        </Literal>  
+    </Declarations>  
+    <Code Language="SQL">
+		<![CDATA[
+    /*Make variable*/
+	DECLARE @sql nvarchar(max)
+		   ,@paramsDefinition nvarchar(max) = '@parLanguagId tinyint, @parSchoolLocationId tinyint'
+		   ,@filter nvarchar(max) = '';
+
+	SET @filter += IIF(ISNULL(@schoolLocationId, 0) <> 0, ' AND bb.schoolLocationId = @parSchoolLocationId', '');
+
+	SET @sql = 'SELECT 1
+			  FROM dbo.billingInvoices a
+			 WHERE 1=1 AND #dynamic# ;'
+
+    SET @sql = REPLACE(@sql,'#dynamic#',@filter);
+
+	EXECUTE sp_executesql @sql, @paramsDefinition, @parLanguagId = @languagId, @parSchoolLocationId = @schoolLocationId;
+
+        ]]>  
+    </Code>  
+    </Snippet>  
+</CodeSnippet>  
+</CodeSnippets>
