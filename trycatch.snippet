@@ -50,7 +50,7 @@
             COMMIT TRAN;
 			
 			/*Response message*/
-            SELECT 'respon' AS respon, 0 AS responCode;
+            SELECT 1 AS responCode, 'Success' AS respon;
 			
 			/*Return response message*/
 			SELECT @responseCode = 1/*SET response code as success*/, @response = 'Success';

@@ -64,11 +64,15 @@ BEGIN
 
             /*Transaction Commit*/
             COMMIT TRAN;
-            SELECT 'respon' AS respon, 0 AS responCode;
+            
+            /*Response message*/
+            SELECT 0 AS responCode, 'Success' AS respon;
         END TRY
         BEGIN CATCH
             /*Transaction Rollback*/
             ROLLBACK TRAN;
+            
+            /*Exception message*/
             SELECT responCode, respon
 		      FROM dbo.generate_exceptionMessage(@responseCode, ERROR_MESSAGE());
         END CATCH  
