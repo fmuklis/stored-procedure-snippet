@@ -34,12 +34,8 @@
 			   ,@otherData nvarchar(max);
 
 		/*SET activity description*/
-<<<<<<< HEAD
 		SELECT @description = CONCAT(a.fullName, ' activity description')
 		  FROM dbo.fnUser_GetById(@userIdSession) a;
-=======
-		SET @description = CONCAT(dbo.fnUser_GetFullName(@userIdSession), ' activity description');
->>>>>>> 019f964f17ccd5bd0427c7caa1801c302caf585a
 
 		/*Add log activity*/
 		EXECUTE dbo.system_activity_log_Add @userIdSession, 'system configuration', @description, @ip, procedure name, 'U', @origin, @otherData;
