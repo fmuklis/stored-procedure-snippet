@@ -31,14 +31,15 @@
 	/*Create log activity*/
 		/*Make variable*/
 		DECLARE @description nvarchar(max)
-			   ,@otherData nvarchar(max);
+			   ,@otherData nvarchar(max)
+               ,@storeProcedureName varchar(max) = (SELECT OBJECT_NAME(@@PROCID));
 
 		/*SET activity description*/
 		SELECT @description = CONCAT(a.fullName, ' activity description')
 		  FROM dbo.fnUser_GetById(@userIdSession) a;
 
 		/*Add log activity*/
-		EXECUTE dbo.system_activity_log_Add @userIdSession, 'system configuration', @description, @ip, procedure name, 'U', @origin, @otherData;
+		EXECUTE dbo.system_activity_log_Add @userIdSession, 'system configuration', @description, @ip, @storeProcedureName, 'U', @origin, @otherData;
     ]]>  
     </Code>  
     </Snippet>  
