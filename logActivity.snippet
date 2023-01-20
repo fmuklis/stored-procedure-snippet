@@ -38,7 +38,7 @@
 		  FROM dbo.fnUser_GetById(@userIdSession) a;
 
 		/*Add log activity*/
-		EXECUTE dbo.system_activity_log_Add @userIdSession, 'system configuration', @description, @ip, procedure name, 'U', @origin, @otherData;
+		EXECUTE dbo.system_activity_log_Add @userIdSession, 'system configuration', @description, @ip, OBJECT_NAME(@@PROCID), 'U', @origin, @otherData;
     ]]>  
     </Code>  
     </Snippet>  
