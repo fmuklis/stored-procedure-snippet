@@ -67,7 +67,11 @@ BEGIN
             COMMIT TRAN;
 			
 			/*Response message*/
-            SELECT 'respon' AS respon, 0 AS responCode;
+            SELECT 1 AS responCode
+                    ,IIF(@languageId = 1/*ID*/
+                        ,'Indonesia'
+                        ,'English'
+                    ) AS respon;
         END TRY
         BEGIN CATCH
             /*Transaction Rollback*/
