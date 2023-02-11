@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>  
+<CodeSnippets  xmlns="https://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">  
+    <_locDefinition xmlns="urn:locstudio">  
+        <_locDefault _loc="locNone" />  
+        <_locTag _loc="locData">Title</_locTag>  
+        <_locTag _loc="locData">Description</_locTag>  
+        <_locTag _loc="locData">Author</_locTag>  
+        <_locTag _loc="locData">ToolTip</_locTag>  
+        <_locTag _loc="locData">Default</_locTag>  
+    </_locDefinition>
+<CodeSnippet Format="1.0.0">  
+    <Header>  
+        <Title>Create SProc Query Pagination</Title>  
+        <Shortcut></Shortcut>  
+        <Description>Snippet for creating procedure pagination</Description>  
+        <Author>SQL Server Books Online Example</Author>  
+        <SnippetTypes>  
+            <SnippetType>Expansion</SnippetType>  
+        </SnippetTypes>  
+    </Header>  
+    <Snippet>  
+    <Declarations>  
+        <Literal>  
+        <ID>CatchCode</ID>  
+        <ToolTip>Code to handle the caught error</ToolTip>  
+        <Default>CatchCode</Default>  
+        </Literal>  
+    </Declarations>  
+    <Code Language="SQL">
+				<![CDATA[
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE <Procedure_Name, sysname, ProcedureName> 
+	-- Add the parameters for the stored procedure here
+	@start int,
+	@length int,
+	@search varchar(50)
+
+WITH EXECUTE AS OWNER
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	SET NOCOUNT ON;
+
+	-- interfering with SELECT statements.
+	DECLARE @currentDate date = GETDATE();
+	DECLARE @sql NVARCHAR(MAX)
+		   ,@paramsDefinitions NVARCHAR(MAX) = '@parSearch VARCHAR(50), @parCurrentDate date'
+		   ,@where NVARCHAR(MAX) = CASE
+										WHEN LEN(@search) >= 3
+											 THEN 'WHERE CONCAT(d.nim,d.studentName,d.courseName) LIKE ''%'' + @parSearch + ''%'''
+										ELSE ''
+									END;
+
+	SET @sql = '
+		WITH dataSet AS (
+				SELECT DISTINCT a.studentId, d.studentName, d.courseName, d.nim, f.semester, c.certificateStatus
+				FROM course.student a
+			 #dynamicHere#)
+
+		SELECT studentId, studentName, courseName, nim, semester, certificateStatus
+				  ,COUNT(*) OVER () AS jumlahData
+				  ,ROW_NUMBER() OVER (ORDER BY studentName) AS id
+			  FROM dataSet
+		  ORDER BY id
+		  OFFSET '+ CAST(@start AS NVARCHAR(MAX)) +' ROWS
+		  FETCH NEXT '+ CAST(@length AS NVARCHAR(MAX)) +' ROWS ONLY';
+
+	SET @sql = REPLACE(@sql, '#dynamicHere#', @where);
+	
+	EXECUTE sp_executesql @sql, @paramsDefinitions, @parSearch = @search, @parCurrentDate = @currentDate;
+
+
+END
+GO			
+    ]]>  
+    </Code>  
+    </Snippet>  
+</CodeSnippet>  
+</CodeSnippets>
