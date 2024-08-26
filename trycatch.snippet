@@ -28,45 +28,43 @@
     </Declarations>  
     <Code Language="SQL">
 				<![CDATA[
-	/*Make variable*/
-	DECLARE @responseCode tinyint
-		   ,@response varchar(max);
-		   
-	/*SET variable value*/
-	SELECT @responseCode = 0/*SET default response code as failed*/
-		  ,@response = 'Terjadi error saat memproses permintaan anda';		   
+	/*Declaring variable*/
+	DECLARE @responseCode tinyint = 0/*SET default response code as failed*/,
+			@response varchar(max) = 'Terjadi error saat memproses permintaan anda';		   
 				
     IF 1 = 1
         BEGIN
-            SELECT 'respon' AS respon, 0 AS responCode;
+            SELECT 'respon.' AS respon, 0 AS responCode;
+			
+			RETURN;
         END
-    ELSE  
-        BEGIN TRY
-            /*Transaction Begin*/
-            BEGIN TRAN;
+ 
+	BEGIN TRY
+		/*Transaction Begin*/
+		BEGIN TRAN;
 
 
-            /*Transaction Commit*/
-            COMMIT TRAN;
+		/*Transaction Commit*/
+		COMMIT TRAN;
 			
-			/*Response message*/
-            SELECT 1 AS responCode, 'Success' AS respon;
+		/*Response message*/
+		SELECT 1 AS responCode, 'Success.' AS respon;
 			
-			/*Return response message*/
-			SELECT @responseCode = 1/*SET response code as success*/, @response = 'Success';
-        END TRY  
-        BEGIN CATCH  
-            /*Transaction Rollback*/
-            ROLLBACK TRAN;
+		/*Return response message*/
+		SELECT @responseCode = 1/*SET response code as success*/, @response = 'Success';
+	END TRY  
+	BEGIN CATCH  
+		/*Transaction Rollback*/
+		ROLLBACK TRAN;
 			
-            /*Exception message*/
-			SELECT responCode, respon
-		      FROM dbo.generate_exceptionMessage(@responseCode, ERROR_MESSAGE());
+		/*Exception message*/
+		SELECT responCode, respon
+	      FROM dbo.generate_exceptionMessage(@responseCode, ERROR_MESSAGE());
 			  
-            /*Return exception message*/
-			SELECT @responseCode = responCode, @response = responseOrigin
-		      FROM dbo.generate_exceptionMessage(@responseCode, ERROR_MESSAGE());			  
-        END CATCH  
+		/*Return exception message*/
+		SELECT @responseCode = responCode, @response = responseOrigin
+	      FROM dbo.generate_exceptionMessage(@responseCode, ERROR_MESSAGE());			  
+	END CATCH  
     ]]>  
     </Code>  
     </Snippet>  

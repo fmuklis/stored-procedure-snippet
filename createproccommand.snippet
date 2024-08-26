@@ -47,23 +47,26 @@ BEGIN
 		   
 	/*SET default response code*/
 	SELECT @responseCode = 0/*failed as default response code*/
-		  ,@response = 'Terjadi error saat memproses permintaan anda';		   
+		  ,@response = 'Terjadi error saat memproses permintaan anda.';		   
 				
     IF 1 = 1
         BEGIN
-            SELECT @response = 'Terjadi error saat memproses permintaan anda';	
+            SELECT @response = 'Terjadi error saat memproses permintaan anda.';
+			
+			RETURN;
         END
-    ELSE  
-        BEGIN TRY
+   
+	BEGIN TRY
             
-			/*Return response message*/
-			SELECT @responseCode = 1/*success as response code*/, @response = 'Success';
-        END TRY  
-        BEGIN CATCH  
-            /*Return exception message*/
-			SELECT @responseCode = responCode, @response = responseOrigin
-		      FROM dbo.generate_exceptionMessage(@responseCode, ERROR_MESSAGE());
-        END CATCH  
+		/*Return response message*/
+		SELECT @responseCode = 1/*success as response code*/, @response = 'Success';
+	END TRY  
+	BEGIN CATCH  
+		/*Return exception message*/
+		SELECT @responseCode = responCode, @response = responseOrigin
+		  FROM dbo.generate_exceptionMessage(@responseCode, ERROR_MESSAGE());
+	END CATCH
+	
 END
 GO			
     ]]>  

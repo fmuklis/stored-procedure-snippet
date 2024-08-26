@@ -29,12 +29,20 @@
 			<Code Language="SQL">
 				<![CDATA[
 		/*Execute procedure*/
-		EXECUTE <Procedure_Name, sysname, ProcedureName> @parameters, @responseCode OUTPUT, @response OUTPUT;
+		EXECUTE <Procedure_Name, sysname, ProcedureName>
+				@parameters,
+				@responseCode OUTPUT,
+				@response OUTPUT;
 		
 		/*Check exception*/
 		IF ISNULL(@responseCode, 0) <> 1/*not success*/
 			BEGIN
 				RAISERROR(@response, 16, 1);
+				
+				SELECT responCode, respon
+				  FROM dbo.generate_exceptionMessage(@responseCode, @response);
+				  
+				RETURN;
 			END
     ]]>
 			</Code>

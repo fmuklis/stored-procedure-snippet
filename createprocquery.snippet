@@ -44,17 +44,13 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	/*Make variable*/
-	DECLARE @responseCode tinyint
-		   ,@response nvarchar(max);
-		   
-	/*SET variable value*/
-	SELECT @responseCode = 0/*SET default response code as failed*/
-		  ,@response = 'Terjadi error saat memproses permintaan anda';		   
+	/*Declaring variable*/
+	DECLARE @responseCode tinyint = 0/*SET default response code as failed*/,
+			@response nvarchar(max) = 'Terjadi error saat memproses permintaan anda.';  
 				
     IF 1 = 1
         BEGIN
-            SELECT 'respon' AS respon, 0 AS responCode;
+            SELECT 'respon.' AS respon, 0 AS responCode;
         END
     ELSE  
         BEGIN TRY
@@ -66,7 +62,7 @@ BEGIN
             COMMIT TRAN;
             
             /*Response message*/
-            SELECT 0 AS responCode, 'Success' AS respon;
+            SELECT 0 AS responCode, 'Success.' AS respon;
         END TRY
         BEGIN CATCH
             /*Transaction Rollback*/

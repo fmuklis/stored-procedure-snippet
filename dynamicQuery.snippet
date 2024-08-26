@@ -29,9 +29,9 @@
     <Code Language="SQL">
 		<![CDATA[
     /*Make variable*/
-	DECLARE @sql nvarchar(max)
-		   ,@paramsDefinition nvarchar(max) = '@parLanguageId tinyint, @parSchoolLocationId tinyint'
-		   ,@filter nvarchar(max) = '';
+	DECLARE @sql nvarchar(max),
+			@paramsDefinition nvarchar(max) = '@parLanguageId tinyint, @parSchoolLocationId tinyint',
+			@filter nvarchar(max) = '';
 
 	SET @filter += IIF(ISNULL(@schoolLocationId, 0) <> 0, ' AND bb.schoolLocationId = @parSchoolLocationId', '');
 

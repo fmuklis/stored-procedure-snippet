@@ -45,11 +45,10 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	SET NOCOUNT ON;
 
-	-- interfering with SELECT statements.
-	DECLARE @currentDate date = GETDATE();
-	DECLARE @sql NVARCHAR(MAX)
-		   ,@paramsDefinitions NVARCHAR(MAX) = '@parSearch VARCHAR(50), @parCurrentDate date'
-		   ,@where NVARCHAR(MAX) = CASE
+	DECLARE @currentDate date = GETDATE(),
+			@sql NVARCHAR(MAX),
+			@paramsDefinitions NVARCHAR(MAX) = '@parSearch VARCHAR(50), @parCurrentDate date',
+			@where NVARCHAR(MAX) = CASE
 										WHEN LEN(@search) >= 3
 											 THEN 'WHERE CONCAT(d.nim,d.studentName,d.courseName) LIKE ''%'' + @parSearch + ''%'''
 										ELSE ''
@@ -72,7 +71,6 @@ BEGIN
 	SET @sql = REPLACE(@sql, '#dynamicHere#', @where);
 	
 	EXECUTE sp_executesql @sql, @paramsDefinitions, @parSearch = @search, @parCurrentDate = @currentDate;
-
 
 END
 GO			
