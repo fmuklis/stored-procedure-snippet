@@ -28,7 +28,7 @@
     </Declarations>  
     <Code Language="SQL">
 				<![CDATA[
-	/*Create log activity*/
+		/*Create log activity*/
 		/*Declaring variable*/
 		DECLARE @description nvarchar(max),
 				@otherData nvarchar(max),
@@ -36,7 +36,7 @@
 
 		/*SET activity description*/
 		SELECT @description = CONCAT(a.fullName, ' activity description')
-		  FROM dbo.fnUser_GetById(@userIdSession) a;
+		  FROM dbo.fnLog_GetUser(@userIdSession) a;
 
 		/*Add log activity*/
 		EXECUTE dbo.system_activity_log_Add
